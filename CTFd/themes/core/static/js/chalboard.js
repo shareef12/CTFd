@@ -307,26 +307,34 @@ function loadhint(hintid){
     var md = window.markdownit({
         html: true,
     });
+    $.post(script_root + "/hints/" + hintid, {'nonce': $('#nonce').val()}, function (data) {
+        if (data.errors) {
+            ezal({
+                title: "Error!",
+                body: data.errors,
+                button: "Okay"
+            });
+        } else {
+            $("#hintbutton"+hintid).text("View Hint");
+            $("#hintbutton"+hintid).attr("onclick","javascript:loadhint("+hintid+")");
+            ezal({
+                title: "Hint",
+                body: md.render(data.hint),
+                button: "Got it!"
+            });
+        }
+    });
+}
+
+function loadhintconfirm(hintid){
+    var md = window.markdownit({
+        html: true,
+    });
     ezq({
         title: "Unlock Hint?",
         body: "Are you sure you want to open this hint?",
         success: function(){
-            $.post(script_root + "/hints/" + hintid, {'nonce': $('#nonce').val()}, function (data) {
-                if (data.errors) {
-                    ezal({
-                        title: "Error!",
-                        body: data.errors,
-                        button: "Okay"
-                    });
-                } else {
-
-                    ezal({
-                        title: "Hint",
-                        body: md.render(data.hint),
-                        button: "Got it!"
-                    });
-                }
-            });
+            loadhint(hintid);
         }
     });
 }

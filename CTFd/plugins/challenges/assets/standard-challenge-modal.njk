@@ -29,23 +29,17 @@
                         <div class="chal-hints hint-row row">
                             {% for hint in hints %}
                             <div class='col-md-12 hint-button-wrapper text-center mb-3'>
-                                <a class="btn btn-info btn-hint btn-block" href="javascript:;" onclick="javascript:loadhint({{hint.id}})">
-                                    {% if hint.hint %}
-                                        <small>
+                                <small>
+                                {% if not hint.hint and hint.cost %}
+                                    <a id=hintbutton{{hint.id}} class="btn btn-info btn-hint btn-block" href="javascript:;" onclick="javascript:loadhintconfirm({{hint.id}})">
+                                        Unlock Hint for {{hint.cost}} points
+                                    </a>
+                                {% else %}
+                                    <a id=hintbutton{{hint.id}} class="btn btn-info btn-hint btn-block" href="javascript:;" onclick="javascript:loadhint({{hint.id}})">
                                         View Hint
-                                        </small>
-                                    {% else %}
-                                        {% if hint.cost %}
-                                            <small>
-                                            Unlock Hint for {{hint.cost}} points
-                                            </small>
-                                        {% else %}
-                                            <small>
-                                            View Hint
-                                            </small>
-                                        {% endif %}
-                                    {% endif %}
-                                </a>
+                                    </a>
+                                {% endif %}
+                                </small>
                             </div>
                             {% endfor %}
                         </div>
