@@ -1,6 +1,6 @@
 from CTFd.plugins import register_plugin_assets_directory
 from CTFd.plugins.keys import get_key_class
-from CTFd.models import db, Solves, WrongKeys, Keys, Challenges, Files, Tags, Hints
+from CTFd.models import db, Solves, WrongKeys, Keys, Challenges, Files, Tags, Hints, Awards, Unlocks
 from CTFd import utils
 
 
@@ -163,6 +163,14 @@ class CTFdStandardChallenge(BaseChallenge):
         provided_key = request.form['key'].strip()
         solve = Solves(teamid=team.id, chalid=chal.id, ip=utils.get_ip(req=request), flag=provided_key)
         db.session.add(solve)
+
+        unlocked_hints = set([u.itemid for u in Unlocks.query.filter_by(model='hints', teamid=team.id)])
+        for hint in Hints.query.filter_by(chal=chal.id).all():
+            if hint.id in unlocked_hints:
+                award = Awards(teamid=team.id, name=utils.text_type('Hint for {}'.format(chal.name)),
+                               value=(-hint.cost))
+                db.session.add(award)
+
         db.session.commit()
         db.session.close()
 

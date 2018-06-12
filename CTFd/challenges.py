@@ -18,7 +18,6 @@ from CTFd.utils.decorators import (
     require_verified_emails,
     viewable_without_authentication
 )
-from CTFd.utils import text_type
 
 challenges = Blueprint('challenges', __name__)
 
@@ -47,12 +46,12 @@ def hints_view(hintid):
             if utils.ctftime() or (utils.ctf_ended() and utils.view_after_ctf()) or utils.is_admin() is True:
                 # It's ctftime or the CTF has ended (but we allow views after)
                 team = Teams.query.filter_by(id=session['id']).first()
-                if team.score() < hint.cost:
-                    return jsonify({'errors': 'Not enough points'})
+                #if team.score() < hint.cost:
+                #    return jsonify({'errors': 'Not enough points'})
                 unlock = Unlocks(model='hints', teamid=session['id'], itemid=hint.id)
-                award = Awards(teamid=session['id'], name=text_type('Hint for {}'.format(chal.name)), value=(-hint.cost))
+                #award = Awards(teamid=session['id'], name=text_type('Hint for {}'.format(chal.name)), value=(-hint.cost))
                 db.session.add(unlock)
-                db.session.add(award)
+                #db.session.add(award)
                 db.session.commit()
                 json_data = {
                     'hint': hint.hint,
