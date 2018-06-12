@@ -1,0 +1,3 @@
+[submodule "CTFd/plugins/ctfd-portable-challenges-plugin"]
+	path = CTFd/plugins/ctfd-portable-challenges-plugin
+	url = https://github.com/shareef12/ctfd-portable-challenges-plugin.git
